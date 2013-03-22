@@ -24,17 +24,27 @@ public class Server implements Runnable {
 		try {
 			server = ServerSocketChannel.open();
 			server.configureBlocking(false);
-			server.socket().bind(new InetSocketAddress(serverState.getListeningPort()));
+			server.socket().bind(
+					new InetSocketAddress(serverState.getListeningPort()));
 			selector = Selector.open();
-			server.register(selector, SelectionKey.OP_ACCEPT);
+
 			while (serverState.running()) {
+				server.register(selector, SelectionKey.OP_ACCEPT);
+
+				for (SocketChannel socket : clientList) {
+					socket.register(selector, SelectionKey.OP_READ);
+				}
+
 				selector.select();
 				Iterator<SelectionKey> it = selector.selectedKeys().iterator();
 				while (it.hasNext()) {
 					SelectionKey selKey = it.next();
 					it.remove();
 					if (selKey.isAcceptable()) {
-						clientList.add(((ServerSocketChannel)selKey.channel()).accept());
+						clientList.add(((ServerSocketChannel) selKey.channel())
+								.accept());
+					}else if(selKey.isReadable()){
+						((SocketChannel)selKey.channel()).socket();
 					}
 				}
 			}

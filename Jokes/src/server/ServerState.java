@@ -150,11 +150,10 @@ public class ServerState {
 	public synchronized int getListeningPort() {
 		return listeningPort;
 	}
-	
+
 	public synchronized void setListeningPort(int listeningPort) {
 		this.listeningPort = listeningPort;
 	}
-	
 
 	public synchronized boolean serving() {
 		return this.servingQueueSize > 0;
