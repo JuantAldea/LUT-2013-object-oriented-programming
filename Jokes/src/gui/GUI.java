@@ -117,9 +117,9 @@ public class GUI {
 			public void mouseUp(MouseEvent e) {
 				if (!serverState.running()) {
 					serverState.startServer();
+					btnStartServer.setText("Stop server");
 					serverThread = new Thread(new Server());
 					serverThread.start();
-					btnStartServer.setText("Stop server");
 				} else {
 					btnStartServer.setEnabled(false);
 					btnStartServer.setText("Wait");
